@@ -56,4 +56,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("io.coil-kt:coil-compose:2.0.0")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5") // Adjust to your Compose version
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.0.5")
 }
+

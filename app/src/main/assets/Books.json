@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "title": "To Kill a Mockingbird",
+    "author": "Harper Lee",
+    "coverImage": "https://covers.openlibrary.org/b/id/8228691-L.jpg",
+    "description": "A novel about the serious issues of rape and racial inequality.",
+    "isFavorite": false
+  },
+  {
+    "id": "2",
+    "title": "1984",
+    "author": "George Orwell",
+    "coverImage": "https://covers.openlibrary.org/b/id/7222246-L.jpg",
+    "description": "A dystopian social science fiction novel and cautionary tale.",
+    "isFavorite": false
+  },
+  {
+    "id": "3",
+    "title": "Pride and Prejudice",
+    "author": "Jane Austen",
+    "coverImage": "https://covers.openlibrary.org/b/id/8235041-L.jpg",
+    "description": "A romantic novel of manners that explores issues of marriage, money, and love.",
+    "isFavorite": true
+  },
+  {
+    "id": "4",
+    "title": "The Great Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "coverImage": "https://covers.openlibrary.org/b/id/7222161-L.jpg",
+    "description": "A novel about the American dream and the roaring twenties.",
+    "isFavorite": false
+  },
+  {
+    "id": "5",
+    "title": "Moby-Dick",
+    "author": "Herman Melville",
+    "coverImage": "https://covers.openlibrary.org/b/id/7222069-L.jpg",
+    "description": "A novel about the quest of Captain Ahab to exact revenge on Moby Dick, a giant white whale.",
+    "isFavorite": false
+  }
+]
