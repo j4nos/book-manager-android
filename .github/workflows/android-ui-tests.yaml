@@ -42,17 +42,34 @@ jobs:
         profile: Nexus 6
         emulator-options: "-no-window -no-audio"
         disable-animations: true
-        script: echo "Starting Emulator"  # Placeholder script to avoid "input required" error
+        script: echo "Starting Emulator"
 
-    # 5. Wait for the Android Emulator to boot
+    # 5. Wait for the Android Emulator to boot (with timeout)
     - name: Wait for Android Emulator to boot
-      run: adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+      run: |
+        boot_timeout=300 # Set timeout to 5 minutes
+        boot_time=0
+        until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
+          if [ $boot_time -ge $boot_timeout ]; then
+            echo "Emulator boot timed out after $boot_timeout seconds."
+            adb -s emulator-5554 emu kill # Terminate emulator
+            exit 1
+          fi
+          echo "Waiting for emulator to boot..."
+          sleep 10
+          boot_time=$((boot_time + 10))
+        done
+        echo "Emulator booted successfully."
 
-    # 6. Run UI tests
+    # 6. Check Emulator Log (optional, for troubleshooting)
+    - name: Print Emulator Log
+      run: adb logcat -d
+
+    # 7. Run UI tests
     - name: Run UI tests
       run: ./gradlew connectedAndroidTest
 
-    # 7. Upload UI test results (optional)
+    # 8. Upload UI test results (optional)
     - name: Upload UI test results
       if: failure()
       uses: actions/upload-artifact@v3
