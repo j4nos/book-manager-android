@@ -10,14 +10,15 @@ on:
 
 jobs:
   ui_tests:
-    runs-on: ubuntu-latest
+    # Use macOS runner to support hardware acceleration with HAXM
+    runs-on: macos-latest
 
     steps:
     # 1. Clone the repository
     - name: Check out repository
       uses: actions/checkout@v2
 
-    # 2. Set up JDK 17
+    # 2. Set up JDK 17 (required for newer SDK Manager)
     - name: Set up JDK 17
       uses: actions/setup-java@v2
       with:
@@ -42,9 +43,16 @@ jobs:
         profile: Nexus 6
         emulator-options: "-no-window -no-audio"
         disable-animations: true
+        emulator-port: 5556            # Use a specific port
+        emulator-boot-timeout: 1200    # 20 minutes
+        force-avd-creation: true
         script: echo "Starting Emulator"
 
-    # 5. Wait for the Android Emulator to boot (with timeout)
+    # 5. Verify ADB Connection
+    - name: Check Emulator Status
+      run: adb devices
+
+    # 6. Wait for the Android Emulator to boot (with timeout)
     - name: Wait for Android Emulator to boot
       run: |
         boot_timeout=300 # Set timeout to 5 minutes
@@ -52,7 +60,7 @@ jobs:
         until adb shell getprop sys.boot_completed | grep -m 1 '1'; do
           if [ $boot_time -ge $boot_timeout ]; then
             echo "Emulator boot timed out after $boot_timeout seconds."
-            adb -s emulator-5554 emu kill # Terminate emulator
+            adb -s emulator-5556 emu kill # Terminate emulator
             exit 1
           fi
           echo "Waiting for emulator to boot..."
@@ -61,15 +69,15 @@ jobs:
         done
         echo "Emulator booted successfully."
 
-    # 6. Check Emulator Log (optional, for troubleshooting)
+    # 7. Check Emulator Log (optional, for troubleshooting)
     - name: Print Emulator Log
       run: adb logcat -d
 
-    # 7. Run UI tests
+    # 8. Run UI tests
     - name: Run UI tests
       run: ./gradlew connectedAndroidTest
 
-    # 8. Upload UI test results (optional)
+    # 9. Upload UI test results (optional)
     - name: Upload UI test results
       if: failure()
       uses: actions/upload-artifact@v3
